@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>NeuralTradeX</title>
+<link rel="icon" href="/static/favicon.svg">
+
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+background:#05070d;
+font-family:'Inter',sans-serif;
+color:#e6f1ff;
+overflow:hidden;
+}
+
+body::before{
+content:"";
+position:fixed;
+inset:0;
+background:
+linear-gradient(rgba(0,255,200,.06) 1px, transparent 1px),
+linear-gradient(90deg, rgba(0,255,200,.06) 1px, transparent 1px);
+background-size:70px 70px;
+animation:gridMove 18s linear infinite;
+z-index:-1;
+}
+@keyframes gridMove{
+from{transform:translateY(0)}
+to{transform:translateY(70px)}
+}
+
+.sidebar{
+position:fixed;
+left:0;top:0;
+width:250px;
+height:100vh;
+background:#04060c;
+border-right:1px solid #00ffc644;
+padding:30px;
+}
+
+.logo{
+font-family:'Space Grotesk';
+font-size:26px;
+font-weight:700;
+color:#00ffc6;
+margin-bottom:40px;
+}
+
+.nav p{
+margin:18px 0;
+color:#7aa6c2;
+cursor:pointer;
+}
+.nav p:hover{color:#00ffc6}
+
+.main{
+margin-left:250px;
+padding:30px;
+height:100vh;
+overflow-y:auto;
+scrollbar-width:thin;
+scrollbar-color:#00ffc6 #020409;
+}
+
+.main::-webkit-scrollbar{
+width:8px;
+}
+
+.main::-webkit-scrollbar-track{
+background:#020409;
+}
+
+.main::-webkit-scrollbar-thumb{
+background:linear-gradient(#00ffc6,#00aaff);
+border-radius:10px;
+box-shadow:0 0 10px #00ffc6;
+}
+
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:25px;
+}
+
+.title{
+font-family:'Space Grotesk';
+font-size:44px;
+background:linear-gradient(90deg,#00ffc6,#00aaff);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+.ticker{
+font-family:'JetBrains Mono';
+color:#00ff9f;
+white-space:nowrap;
+overflow:hidden;
+width:480px;
+}
+.ticker span{
+display:inline-block;
+padding-left:100%;
+animation:scroll 14s linear infinite;
+}
+@keyframes scroll{
+from{transform:translateX(0)}
+to{transform:translateX(-100%)}
+}
+
+.card{
+background:rgba(255,255,255,0.04);
+backdrop-filter:blur(18px);
+border:1px solid rgba(0,255,200,.25);
+border-radius:18px;
+padding:25px;
+margin-bottom:30px;
+box-shadow:0 0 40px rgba(0,255,200,.15);
+}
+
+.chart-card img{
+width:100%;
+border-radius:12px;
+}
+
+.chat-card{
+display:flex;
+flex-direction:column;
+height:420px;
+}
+
+.chat-box{
+flex:1;
+overflow-y:auto;
+background:#020409;
+border-radius:12px;
+padding:15px;
+margin-bottom:12px;
+}
+
+.user{
+text-align:right;
+color:#00ffc6;
+margin:10px 0;
+font-family:'JetBrains Mono';
+}
+
+.bot{
+text-align:left;
+color:#ffaa55;
+margin:10px 0;
+font-family:'JetBrains Mono';
+}
+
+.chat-input{
+display:flex;
+gap:10px;
+}
+
+.chat-input input{
+flex:1;
+padding:12px;
+background:black;
+border:1px solid #00ffc6;
+color:white;
+border-radius:10px;
+font-family:'JetBrains Mono';
+}
+
+.chat-input button{
+padding:12px 20px;
+border:none;
+border-radius:10px;
+background:linear-gradient(90deg,#00ffc6,#00aaff);
+font-weight:bold;
+cursor:pointer;
+}
+
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:25px;
+}
+
+.highlight{
+border:2px solid gold;
+box-shadow:0 0 35px rgba(255,215,0,.4);
+}
+
+.back-btn{
+padding:10px 18px;
+background:linear-gradient(90deg,#00ffc6,#00aaff);
+border:none;
+border-radius:8px;
+color:black;
+font-weight:bold;
+cursor:pointer;
+margin-right:15px;
+box-shadow:0 0 15px #00ffc6;
+}
+.back-btn:hover{
+transform:scale(1.05);
+box-shadow:0 0 35px #00ffc6;
+}
+
+.metric{
+font-family:'JetBrains Mono';
+font-size:18px;
+margin:8px 0;
+}
+
+.green{color:#00ff9f}
+.red{color:#ff4d6d}
+</style>
+</head>
+
+<body>
+
+<div class="sidebar">
+<div class="logo">TRADE TERMINAL</div>
+<div class="nav">
+<p>Dashboard</p>
+<p>Markets</p>
+<p>AI Forecast</p>
+<p>Portfolio</p>
+<p>Analytics</p>
+<p>Settings</p>
+</div>
+</div>
+
+<div class="main">
+
+<div class="header">
+<button onclick="goBack()" class="back-btn">← Back</button>
+<div class="title">TitanTrade Terminal</div>
+<div class="ticker">
+<span>LIVE | NASDAQ ▲2.3% | NIFTY ▲1.2% | SENSEX ▼0.4% | BTC ▲3.8% | TSLA ▲5.1%</span>
+</div>
+</div>
+
+<div class="card chart-card">
+<h2>📈 Live Stock Price Movement</h2>
+{{ plots.interactive_plot|safe }}
+</div>
+
+{% if plots.candle %}
+<div class="card chart-card">
+<h2>🕯️ Interactive Candlestick Chart</h2>
+{{ plots.interactive_candle | safe }}
+</div>
+{% endif %}
+
+<div class="grid">
+
+<div class="card chat-card">
+<h2>💬 AI Trading Assistant</h2>
+
+<div id="chatBox" class="chat-box"></div>
+
+<div class="chat-input">
+<input id="msg" placeholder="Ask: tomorrow price, next 5 days, buy or sell">
+<button onclick="send()">Send</button>
+</div>
+</div>
+
+<div class="card highlight">
+<h2>💰 AI Trade Decision</h2>
+<div class="metric green">{{plots.trade.recommendation}}</div>
+<div class="metric">Current Price: ₹{{plots.trade.current_price}}</div>
+<div class="metric">Predicted Price: ₹{{plots.trade.predicted_price}}</div>
+<div class="metric">Accuracy: {{plots.trade.accuracy}}%</div>
+<div class="metric">Confidence: {{plots.trade.confidence}}%</div>
+</div>
+
+</div>
+
+<div class="grid">
+
+<div class="card">
+<h3>AR Model Summary</h3>
+<pre>{{plots.ar_summary}}</pre>
+</div>
+
+<div class="card">
+<h3>MA Model Summary</h3>
+<pre>{{plots.ma_summary}}</pre>
+</div>
+
+<div class="card">
+<h3>ARMA Model Summary</h3>
+<pre>{{plots.arma_summary}}</pre>
+</div>
+
+<div class="card highlight">
+<h3>🏆 Best Model</h3>
+<p>{{plots.best_model}}</p>
+<p>RMSE: {{plots.rmse}}</p>
+</div>
+
+</div>
+
+<div class="card chart-card">
+<h2>📉 Interactive Residual Diagnostics</h2>
+{{ plots.interactive_residual | safe }}
+</div>
+
+</div>
+
+<script>
+function send(){
+let msg=document.getElementById("msg").value;
+if(!msg) return;
+
+let box=document.getElementById("chatBox");
+box.innerHTML += "<div class='user'>"+msg+"</div>";
+
+fetch("/chat",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({message:msg})
+})
+.then(r=>r.json())
+.then(d=>{
+box.innerHTML += "<div class='bot'>"+d.reply+"</div>";
+box.scrollTop = box.scrollHeight;
+});
+
+document.getElementById("msg").value="";
+}
+
+document.getElementById("msg").addEventListener("keypress", function(e){
+if(e.key === "Enter"){
+e.preventDefault();
+send();
+}
+});
+
+function goBack(){
+window.location.href="/";
+}
+</script>
+
+
+</body>
+</html>

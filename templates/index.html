@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NeuralTradeX</title>
+<link rel="icon" href="/static/favicon.svg">
+
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&family=Inter:wght@300;400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+background:#05070d;
+font-family:'Inter',sans-serif;
+color:white;
+overflow:hidden;
+}
+
+.upload-form{
+display:flex;
+flex-direction:column;
+align-items:center;
+gap:18px;
+margin-top:15px;
+}
+
+.file-label input{
+display:none;
+}
+
+.file-label{
+background:rgba(0,255,200,0.08);
+border:1px solid #00ffc6;
+padding:14px 26px;
+border-radius:12px;
+cursor:pointer;
+font-family:'JetBrains Mono';
+color:#00ffc6;
+transition:.25s;
+box-shadow:0 0 15px rgba(0,255,200,0.25);
+}
+
+.file-status{
+font-family:'JetBrains Mono';
+font-size:14px;
+color:#ff4d6d;
+margin-top:6px;
+transition:.3s;
+}
+
+.file-status.selected{
+color:#00ff9f;
+}
+
+.file-label:hover{
+background:rgba(0,255,200,0.18);
+box-shadow:0 0 30px rgba(0,255,200,0.6);
+transform:scale(1.04);
+}
+
+.ai-btn{
+padding:16px 40px;
+border:none;
+border-radius:14px;
+background:linear-gradient(90deg,#00ffc6,#00aaff);
+color:#02131c;
+font-size:16px;
+font-weight:700;
+font-family:'Space Grotesk';
+letter-spacing:1px;
+cursor:pointer;
+box-shadow:0 0 25px rgba(0,255,200,0.6);
+transition:all .25s ease;
+}
+
+.ai-btn:hover{
+transform:translateY(-2px) scale(1.07);
+box-shadow:0 0 55px rgba(0,255,200,1);
+background:linear-gradient(90deg,#00ffd5,#00c3ff);
+}
+
+body::before{
+content:"";
+position:fixed;
+width:100%;
+height:100%;
+background:
+linear-gradient(rgba(0,255,200,.07) 1px, transparent 1px),
+linear-gradient(90deg, rgba(0,255,200,.07) 1px, transparent 1px);
+background-size:60px 60px;
+animation:gridMove 20s linear infinite;
+z-index:-1;
+}
+@keyframes gridMove{
+from{transform:translateY(0);}
+to{transform:translateY(60px);}
+}
+
+.sidebar{
+position:fixed;
+left:0;
+top:0;
+height:100vh;
+width:250px;
+background:#04060c;
+border-right:1px solid #00ffc644;
+padding:30px;
+}
+
+.logo{
+font-family:'Space Grotesk';
+font-size:26px;
+font-weight:700;
+color:#00ffc6;
+margin-bottom:40px;
+}
+
+.nav p{
+margin:18px 0;
+color:#6c8ca3;
+cursor:pointer;
+}
+.nav p:hover{color:#00ffc6}
+
+.main{
+margin-left:250px;
+padding:30px;
+height:100vh;
+overflow-y:auto;
+scrollbar-width:thin;
+scrollbar-color:#00ffc6 #020409;
+}
+
+.main::-webkit-scrollbar{
+width:8px;
+}
+
+.main::-webkit-scrollbar-track{
+background:#020409;
+}
+
+.main::-webkit-scrollbar-thumb{
+background:linear-gradient(#00ffc6,#00aaff);
+border-radius:10px;
+box-shadow:0 0 10px #00ffc6;
+}
+
+.stock-input{
+padding:16px;
+width:340px;
+background:black;
+border:1px solid #00ffc6;
+border-radius:10px;
+color:white;
+font-family:'JetBrains Mono';
+margin:20px 0;
+text-align:center;
+box-shadow:0 0 12px rgba(0,255,200,0.3);
+font-size:15px;
+}
+
+.stock-input:focus{
+outline:none;
+box-shadow:0 0 25px rgba(0,255,200,0.8);
+}
+
+.file-status.selected{
+color:#00ff9f;
+}
+
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:30px;
+}
+
+.title{
+font-family:'Space Grotesk';
+font-size:48px;
+background:linear-gradient(90deg,#00ffc6,#00aaff);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+.ticker{
+font-family:'JetBrains Mono';
+color:#00ff9f;
+white-space:nowrap;
+overflow:hidden;
+width:450px;
+}
+.ticker span{
+display:inline-block;
+padding-left:100%;
+animation:scroll 12s linear infinite;
+}
+@keyframes scroll{
+from{transform:translateX(0)}
+to{transform:translateX(-100%)}
+}
+
+.float-num{
+position:absolute;
+font-family:'JetBrains Mono';
+color:#00ffc6;
+opacity:.15;
+animation:float 8s infinite linear;
+}
+@keyframes float{
+from{transform:translateY(0)}
+to{transform:translateY(-120px)}
+}
+
+.upload-card{
+width:900px;
+margin:40px auto;
+padding:60px;
+border-radius:20px;
+background:rgba(255,255,255,0.04);
+backdrop-filter:blur(20px);
+border:1px solid rgba(0,255,200,0.3);
+box-shadow:0 0 60px rgba(0,255,200,0.25);
+text-align:center;
+position:relative;
+}
+
+.upload-title{
+font-family:'Space Grotesk';
+font-size:30px;
+margin-bottom:20px;
+color:#00ffc6;
+}
+
+input[type=file]{
+padding:14px;
+background:black;
+border:1px solid #00ffc6;
+color:white;
+border-radius:8px;
+margin:20px 0;
+font-family:'JetBrains Mono';
+}
+
+button{
+padding:16px 40px;
+font-size:16px;
+border:none;
+border-radius:10px;
+background:linear-gradient(90deg,#00ffc6,#00aaff);
+color:black;
+font-weight:bold;
+cursor:pointer;
+box-shadow:0 0 25px #00ffc6;
+transition:.3s;
+}
+button:hover{
+transform:scale(1.07);
+box-shadow:0 0 60px #00ffc6;
+}
+
+.market-box{
+width:900px;
+margin:30px auto;
+padding:25px;
+border-radius:18px;
+background:rgba(255,255,255,0.04);
+backdrop-filter:blur(15px);
+border:1px solid rgba(255,0,80,0.3);
+box-shadow:0 0 30px rgba(255,0,80,0.25);
+}
+
+.market-box h3{
+font-family:'Space Grotesk';
+margin-bottom:12px;
+}
+
+.green{color:#00ff9f}
+.red{color:#ff4d6d}
+
+</style>
+</head>
+
+<body>
+
+<div class="float-num" style="left:40%;top:70%">+2.45%</div>
+<div class="float-num" style="left:60%;top:60%">₹1450</div>
+<div class="float-num" style="left:70%;top:80%">▲ NIFTY</div>
+
+<div class="sidebar">
+<div class="logo">TRADE TERMINAL</div>
+<div class="nav">
+<p>Dashboard</p>
+<p>Markets</p>
+<p>AI Forecast</p>
+<p>Portfolio</p>
+<p>Analytics</p>
+<p>Settings</p>
+</div>
+</div>
+
+<div class="main">
+
+<div class="header">
+<div class="title">TitanTrade Terminal</div>
+
+<div class="ticker">
+<span>LIVE: NASDAQ ▲2.3% | NIFTY ▲1.2% | SENSEX ▼0.4% | BTC ▲3.8% | TESLA ▲5.1%</span>
+</div>
+</div>
+
+<div class="upload-card">
+<div class="upload-title">Enter Stock Symbol for Live AI Analysis</div>
+
+<form action="/analyze" method="post" class="upload-form">
+
+<input 
+type="text" 
+name="symbol" 
+id="symbolInput"
+placeholder="Enter Stock Symbol (AAPL / TSLA / RELIANCE.NS)" 
+required
+class="stock-input"
+oninput="showSymbol()"
+>
+
+<div id="symbolStatus" class="file-status">
+Waiting for stock symbol...
+</div>
+
+<button type="submit">
+    Launch AI Forecast
+</button>
+
+</form>
+
+</div>
+
+<div class="market-box">
+<h3>🌍 Global Market Sentiment</h3>
+<p class="green">US Tech: Bullish 📈</p>
+<p class="green">AI Sector: Strong Buy</p>
+<p class="red">Oil: Volatile</p>
+<p class="green">Crypto: Accumulation</p>
+<p class="green">India IT: Positive</p>
+</div>
+
+</div>
+
+<script>
+function showSymbol(){
+let input=document.getElementById("symbolInput");
+let status=document.getElementById("symbolStatus");
+
+if(input.value.length>1){
+status.innerHTML="Live stock ready for AI analysis ✔";
+status.classList.add("selected");
+}
+else{
+status.innerHTML="Waiting for stock symbol...";
+status.classList.remove("selected");
+}
+}
+</script>
+</body>
+</html>
